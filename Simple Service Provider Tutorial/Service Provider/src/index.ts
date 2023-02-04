@@ -35,6 +35,7 @@ async function main() {
 
     websocketConnection.onmessage = function (e) {
         handleResponse(e);
+        console.log(e);
     };
 
     sendSelfAddressRequest();
