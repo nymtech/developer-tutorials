@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Mixnet Websocket File Upload Client for IPFS</title>
+        <link rel="stylesheet" href="../assets/styles/styles.css">
+    </head>
+    <body style="background-color: #242c3d;font-family: sans-serif;">
+        <div class="toolbar" role="banner">
+            <span class="toolbar-title">IPFS Image Upload Service Provider for Mixnet</span>
+            <div class="spacer"></div>
+            <a
+              href="https://nymtech.net/"
+              title="Nym"
+              target="_blank"
+            >
+              <img src="../assets/images/nym-logo-icon.png" alt="Nym Logo" width="48" height="48">
+            </a>
+            <h3> X </h3>
+            <a
+              href="https://docs.ipfs.tech/"
+              title="IPFS"
+              target="_blank"
+            >
+              <img src="../assets/images/ipfs-logo-icon.png" alt="IPFS Logo" width="48" height="48">
+            </a>
+            <div class="toolbar-tag">
+                <p>Client
+                </p>
+            </div>
+        </div>
+        <div class="content" role="main">
+            
+            <div class="section-container">
+                <div class="file-upload">
+                    <label for="fileInput" class="file-upload-label">UPLOAD image</label>
+                    <input id="fileInput" class="file-upload-input" type="file" accept="image/jpeg, image/png"/>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3>Activity Log</h3>
+                <h5>Sent and received data will be logged below.</h5>
+            
+                <p style="background-color: #202124;color: #fff;padding: 1rem;">
+                    <span id="output"></div>
+                </p>
+            </div>
+        </div>
+        <script src="index.ts"></script>
+    </body>
+</html>
