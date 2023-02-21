@@ -1,0 +1,154 @@
+:host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+        Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+    background: #111627;
+    font-family: sans-serif;
+}
+    
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 8px 0;
+    color: white;
+}
+
+p {
+    margin: 0;
+}
+
+.form-field-label{
+    color: white;
+}
+
+/* Text Inputs */
+select{
+    height:45px;
+    background:#ffffff;
+    border:4px solid #F4511E;
+    border-radius:4px;
+    font-size:18px;
+    padding-left:8px;
+    margin-bottom: 0.5rem;
+}
+
+input:focus{
+    border:4px solid #F4511E;
+    outline:none;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* Text Inputs */
+input[type="text"]{
+    width:400px;
+    height:45px;
+    background:#ffffff;
+    border:4px solid #F4511E;
+    border-radius:4px;
+    font-size:18px;
+    padding-left:8px;
+    margin-bottom: 0.5rem;
+}
+input[type="text"]:focus{
+    border:4px solid #F4511E;
+    outline:none;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+/* Number Inputs */
+input[type="number"]{
+    width:400px;
+    height:45px;
+    background:#ffffff;
+    border:4px solid #F4511E;
+    border-radius:4px;
+    font-size:18px;
+    padding-left:8px;
+    margin-bottom: 0.5rem;
+}
+
+input[type="number"]:focus{
+    border:4px solid #F4511E;
+    outline:none;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+#get-account-button{
+    margin-bottom: 1rem;
+}
+
+#send-button{
+    margin-bottom: 1rem;
+}
+
+
+.toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #111627;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.submit-button {
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+    background:linear-gradient(90deg, #f4731b 1.05%, #f12d50 100%);
+    border: 1px solid #F4511E;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    display: inline-block;
+    float: left;
+    letter-spacing:2px;
+    padding:10px;
+    margin: auto;
+}
+
+.content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-container {
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 850px;
+}
+
+.output-container{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-left:20px;
+    max-width: fit-content;
+    color: #fff;
+    background: #333;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.toolbar{
+    margin-left: 20px;;
+}

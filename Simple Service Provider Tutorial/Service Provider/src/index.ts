@@ -1,23 +1,10 @@
-
-interface MessageData {
-    name : string;
-    service : string;
-    comment : string;
-    gift : boolean;
-}
+import WebSocket, { MessageEvent } from "ws";
 
 /*
     Comprehensive name as opposed to 'Message' for purposed related to understanding the mixnet.
 */
-interface MixnetMessage {
-    message : string;
-    replySurb : boolean; // Marked when we want to use a 'Single Use Reply Block', a distinct piece of functionality on the mixnet.
-    type : string // 'sent' or 'received'
-}
-
 var ourAddress : string;
 var websocketConnection : any;
-var recievedMessageData : string[] = [];
 
 async function main() {
     var port = '1978' // client websocket listens on 1977 by default, change if yours is different
@@ -26,84 +13,82 @@ async function main() {
     /*
         Set up and handle websocket connection to our desktop client.
     */
-
     websocketConnection = await connectWebsocket(localClientUrl).then(function (c) {
         return c;
     }).catch(function (err) {
-        display("Websocket connection error. Is the client running with <pre>--connection-type WebSocket</pre> on port " + port + "?");
+        console.log("Websocket connection error. Is the client running with <pre>--connection-type WebSocket</pre> on port " + port + "?");
+        console.log(err);
     })
 
-    websocketConnection.onmessage = function (e) {
+    websocketConnection.onmessage = function (e : any) {
         handleResponse(e);
     };
 
     sendSelfAddressRequest();
 }
 
-function decodeStringifiedMessage(message : string){
-    let parsedMessage : MessageData;
-    
-    // We need to decode the message that we have received from our client, where it was JSON.stringify'd before it was sent to our service provider.
-    message = message.replace(/\//g,"");
-
-    // After using 'string.replace()' as above, we can turn our data back into an object. This will make it match our attributes defined in the MessageData interface
-    parsedMessage = JSON.parse(message);
-
-    // Make a new string value which we can pass into the UI (Received Message Data section).
-    return '<b>Name: </b>' + parsedMessage.name + ' , <b>Service: </b>' + parsedMessage.service + ' ,<b> Personal Comment: </b>' + parsedMessage.comment + ' , <b>Wants Free Stuff?: </b>' + translateYesOrNo(parsedMessage.gift)
-}
-
-function translateYesOrNo(result : boolean){
-    if(result == true) return 'Yes';
-    return 'No';
-}
-
-/*
-    Function that renders the contents of our recievedMessageData array in the Received Message Data section of our UI.
-*/
-function renderMessageList(){
-
-    var str = '<ul>'
-
-    recievedMessageData.forEach(function(message) {
-    str += ' <div class="item"><i class="check circle icon" style="color:orange"></i>'+ message + '</div>';
-    }); 
-
-    str += '</ul>';
-    document.getElementById("slideContainer").innerHTML = str;
-}
-
 /*
      Handle any messages that come back down the websocket. 
 */
 function handleResponse(responseMessageEvent : MessageEvent) {
+
+    /*
+        The '\x1b' orefix you see in our console.log enables the ability for us to color our 'console.log' statements. The number that 
+        you see following the '[' and preceeding 'm' is the color code that can be compared here :
+        https://en.m.wikipedia.org/wiki/ANSI_escape_code#Colors
+    */
+
     try {
-        let response = JSON.parse(responseMessageEvent.data);
+            let response = JSON.parse(responseMessageEvent.data.toString());
         if (response.type == "error") {
-            displayJsonResponseWithoutReply("Server responded with error: " + response.message);
+            console.log("\x1b[91mAn error occured: " + response.message + "\x1b[0m")
         } else if (response.type == "selfAddress") {
-            displayJsonResponseWithoutReply(response);
             ourAddress = response.address;
-            display("Our address is:  " + ourAddress);
+            console.log("\x1b[94mOur address is: " + ourAddress + "\x1b[0m")
         } else if (response.type == "received") {
-            handleReceivedMessage(response)
+            let messageContent = JSON.parse(response.message)
+
+            console.log('\x1b[93mRecieved : \x1b[0m');
+            console.log('\x1b[92mName : ' + messageContent.name + '\x1b[0m');
+            console.log('\x1b[92mService : ' + messageContent.service + '\x1b[0m');
+            console.log('\x1b[92mComment : ' + messageContent.comment + '\x1b[0m');
+
+            console.log('\x1b[93mSending response back to client... \x1b[0m')
+            sendMessageToMixnet(messageContent.fromAddress)
+
         }
     } catch (_) {
-        displayJsonResponseWithoutReply(responseMessageEvent.data)
+        console.log('something went wrong in handleResponse')
     }
 }
 
-function handleReceivedMessage(message : MixnetMessage) {
-    const text = message.message
+/*
+    Function that gets the form data and sends that to the mixnet in a stringified JSON format.
+*/
+function sendMessageToMixnet(targetAddress : any) {
+
+    /*
+        Place each of the form values into a single object to be sent.
+    */
+    const messageContentToSend = {
+        text : 'We recieved your request!',
+        fromAddress : ourAddress
+    }
     
-    //Make the message that we receive appear in the Activity Log.
-    displayJsonResponseWithoutReply(text)
-
-    //Remove slashes , convert message back into json object and add it to our received messages data section.
-    recievedMessageData.push(decodeStringifiedMessage(text));
-
-    //Re-render our UI to display our updated received message data.
-    renderMessageList();
+    /*
+        We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.
+    */
+    const message = {
+        type: "send",
+        message: JSON.stringify(messageContentToSend),
+        recipient: targetAddress,
+        withReplySurb: false,
+    }
+    
+    /*
+        Send our message object via out via our websocket connection.
+    */
+    websocketConnection.send(JSON.stringify(message));
 }
 
 /*
@@ -117,33 +102,9 @@ function sendSelfAddressRequest() {
 }
 
 /*
-    Set up and handle websocket connection to our desktop client.
-*/
-function display(message : string) {
-    console.log('in display');
-    console.log(message);
-    document.getElementById("output").innerHTML += "<p>" + message + "</p >";
-}
-
-/*
-    Function that takes a the incoming message (as sting) as a parameter and displays it as a new entry in the Activity Log.
-*/
-function displayJsonResponseWithoutReply(message : string) {
-    let receivedDiv = document.createElement("div")
-    let paragraph = document.createElement("p")
-
-    paragraph.setAttribute('style', 'color: orange')
-    let paragraphContent = document.createTextNode("received >>> " + JSON.stringify(message))
-    paragraph.appendChild(paragraphContent)
-
-    receivedDiv.appendChild(paragraph)
-    document.getElementById("output").appendChild(receivedDiv)
-}
-
-/*
     Function that connects our application to the mixnet Websocket. We want to call this first in our main function.
 */
-function connectWebsocket(url) {
+function connectWebsocket(url : string) {
     return new Promise(function (resolve, reject) {
         var server = new WebSocket(url);
         console.log('connecting to Mixnet Websocket (Nym Client)...')
@@ -157,4 +118,6 @@ function connectWebsocket(url) {
     });
 }
 
+
 main();
+
