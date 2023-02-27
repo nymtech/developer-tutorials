@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            .headerContainer{
+                align-items: end;
+                display: flex;
+                margin-left: 10px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+            .container{
+                width: 400px;
+                margin-left: 20px;
+            }
+            </style>
+        <meta charset="UTF-8">
+        <title>Mixnet Websocket Starter Client</title>
+        <link rel="stylesheet" href="../assets/semantic.min.css"/>
+    </head>
+    <body>
+        <div class="headerContainer">
+            <img class="ui small image" src="https://nymtech.net/img/docs/FAVICON_DARK.png" style="height:45px;width:45px;">
+            <h1 style="margin-left: 10px;margin-top: 20px">Mixnet Websocket Starter User Client</h1>
+        </div>
+        
+        <div class="container">
+            <form class="ui form">
+                <div class="field">
+                    <label>Name</label>
+                    <input type="text" id="nameInput" name="nameInput" value="Freddy">
+                    </div>
+                <div class="field">
+                    <label>Service</label>
+                    <select class="ui dropdown" id="serviceSelect" name="serviceSelect">
+                    <option value="service_1">Service 1</option>
+                    <option value="service_2">Service 2</option>
+                    <option value="service_3">Service 3</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Message</label>
+                    <input type="text" id="textInput" name="textInput" value="Hello, Service Provider. I would like to use a service!">
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                    <input type="checkbox" id="freebieCheck" name="freebieCheck">
+                    <label for="checkbox"> Send me free stuff.</label>
+                    </div>
+                </div>
+            </form>
+            <div class="field" style="margin-top: 10px;">
+                <button class="ui button" id="send-button"><i class="icon location arrow"></i>Send</button>
+            </div>
+        </div>
+        
+        <div class="ui icon message" style="margin-left:20px;max-width: fit-content;">
+            <i class="question circle icon"></i>
+            <div class="content">
+                <div class="header">
+                    How it works
+                    </div>
+                    <p>Once you have started your Nym Websocket client(s), you can fill out the form and send data to the mixnet using the <b>"Send"</b> button.</p>
+                    <p>Your message will then be relayed through your Nym Websocket client running on the port (specified using --port in the command line) which is set to 1977 by default.</p>
+                    <p>Below, you can see the activity log. <b style='color: #36d481;'>Sent</b> messages will display in <b style='color: #36d481;'>green</b> while <b style='color: orange;'>received</b> messages will display in <b style='color: orange;'>orange</b>.</p>
+            </div>
+        </div>
+        
+        <h3 style="margin-left:10px">Activity Log</h3>
+        
+        <p style="background-color: #202124;color: #fff;">
+            <span id="output"></div>
+        </p>
+        <script src="../assets/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../assets/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="index.ts"></script>
+    </body>
+</html>

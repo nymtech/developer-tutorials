@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            .headerContainer{
+            align-items: end;
+            display: flex;
+            margin-left: 10px;
+            margin-top: 10px;
+            }
+            .container{
+                width: 400px;
+                margin-left: 20px;
+            }
+        </style>
+        <meta charset="UTF-8">
+        <title>Mixnet Websocket Starter Service Provider</title>
+        <link rel="stylesheet" href="../assets/semantic.min.css"/>
+    </head>
+    <body>
+        <div class="headerContainer">
+        <img class="ui small image" src="https://nymtech.net/img/docs/FAVICON_DARK.png" style="height:45px;width:45px;">
+        <h1 style="margin-left: 10px;margin-top: 20px">Mixnet Websocket Starter Service Provider</h1> 
+        </div>
+
+        <h3 style="margin-left: 20px;">Recieved Message Data</h3>
+        <div class="ui list">
+        <div id="slideContainer"></div>
+        </div>
+
+        <hr>
+
+        <div class="ui icon message" style="margin-left:20px;max-width: fit-content;">
+            <i class="question circle icon"></i>
+            <div class="content">
+                <div class="header">
+                    How it works
+                </div>
+                <p>Once you have started your Nym Websocket client(s), this demo service providr will listen to messages that ocme through clients.</p>
+                <p>For local testing purposes, make sure that you use the '--port' param when starting your Nym Client. Make sure that its running on a differentn port than the one thats sends messages to this application.</p>
+                <p>Below, you can see the activity log. <b style='color: #36d481;'>Sent</b> messages will display in <b style='color: #36d481;'>green</b> while <b style='color: orange;'>received</b> messages will display in <b style='color: orange;'>orange</b>.</p>
+            </div>
+        </div>
+        
+        <h3 style="margin-left:10px">Activity Log</h3>
+
+        <p style="background-color: #202124;color: #fff;">
+            <span id="output"></div>
+        </p>
+        <script src="../assets/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../assets/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="index.ts"></script>
+    </body>
+</html>
