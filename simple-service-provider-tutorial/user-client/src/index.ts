@@ -1,12 +1,12 @@
 /*
     The address that is given to us from our mixnet client.
 */
-var ourAddress : string;
+var ourAddress: string;
 
 /*
-    Address we want to send our messages to.
+    Address we want to send our messages to. Replace it with the address of your Service Provider's Nym client!
 */
-var targetAddress: string = 'FR2dKwFTFDPN1DSBUehbWea5RXTEf2tQGUz1L7RsxGHT.QndBs9qMtNH5s3RXmnP96FgzAeFV6nwLNB6hrGGvUN2@62F81C9GrHDRja9WCqozemRFSzFPMecY85MbGwn6efve';
+var targetAddress: string = '6V5eEguz4rUsfntVLKQuD2ymgdY5iDKCV2GY2EH3CxG4.AKdk22atwRaVkN2PLEDsWUKKDc3ieNm1avKqVGgmJx8s@FQon7UwF5knbUr2jf6jHhmNLbJnMreck1eUcVH59kxYE';
 
 /*
     Variable that holds our websocket connection data.
@@ -14,7 +14,7 @@ var targetAddress: string = 'FR2dKwFTFDPN1DSBUehbWea5RXTEf2tQGUz1L7RsxGHT.QndBs9
 var websocketConnection: any;
 
 async function main() {
-    var port = '1977' // client websocket listens on 1977 by default.
+    var port = '1977' // Nym Websocket Client listens on 1977 by default.
     var localClientUrl = "ws://127.0.0.1:" + port;
     
     // Set up and handle websocket connection to our desktop client.
@@ -54,37 +54,32 @@ function sendSelfAddressRequest() {
 */
 function sendMessageToMixnet() {
 
-    //Access our form elements current values
+    // Access our form's elements current values
     var nameInput = (<HTMLInputElement>document.getElementById("nameInput")).value;
-    var serviceSelect = (<HTMLInputElement>document.getElementById("serviceSelect")).value;
     var textInput = (<HTMLInputElement>document.getElementById("textInput")).value;
-    
-    //Place each of the form values into a single object to be sent.
+   
+    // construct the content of our message to send through the mixnet 
     const messageContentToSend = {
         name : nameInput,
-        service : serviceSelect,
         comment : textInput,
-        fromAddress : ourAddress
     }
     
-    /*We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.*/
+    // construct our message object to send to the SP via the mixnet   
     const message = {
-        type: "send",
+        type: "sendAnonymous",
         message: JSON.stringify(messageContentToSend),
         recipient: targetAddress,
-        withReplySurb: false,
+        replySurbs: 5
     }
     
-    //Display our json data to ber sent
+    // Display the json data you're sending to the SP on the UI
     displayJsonSend(message);
     
-    //Send our message object via out via our websocket connection.
+    // Send our message object via out via our websocket connection.
     websocketConnection.send(JSON.stringify(message));
 }
 
-/*
-    Functions that will display responses into our activity log.
-*/
+// Display responses into our activity log.
 function displayJsonSend(message) {
     let sendDiv = document.createElement("div")
     let paragraph = document.createElement("p")
@@ -96,9 +91,7 @@ function displayJsonSend(message) {
     document.getElementById("output").appendChild(sendDiv)
 }
 
-/* 
-    Connect to a websocket. 
-*/
+// Connect to a websocket. 
 function connectWebsocket(url) {
     return new Promise(function (resolve, reject) {
         var server = new WebSocket(url);
@@ -112,16 +105,12 @@ function connectWebsocket(url) {
     });
 }
 
-/*
-    Display messages that relates to initializing our client and client status (appearing in our activity log).
-*/
+// Display messages that relate to initialising our client + client status in our activity log.
 function displayClientMessage(message) {
     document.getElementById("output").innerHTML += "<p>" + message + "</p >";
 }
 
-/*
-    Handle any messages that come back down the websocket.
-*/
+// Handle any messages that come back down the websocket.
 function handleResponse(resp) {
     try {
         let response = JSON.parse(resp.data);
@@ -129,7 +118,7 @@ function handleResponse(resp) {
             displayJsonResponse("Server responded with error: " + response.message);
         } else if (response.type == "selfAddress") {
             ourAddress = response.address;
-            displayClientMessage("Our address is:  " + ourAddress + ", we will now send messages to ourself.");
+            displayClientMessage("Our address is:  " + ourAddress);
         } else if (response.type == "received") {
             handleReceivedTextMessage(response)
         }
@@ -138,22 +127,18 @@ function handleResponse(resp) {
     }
 }
 
-/*
-    Handle any string message values that are received through messages sent back to us.
-*/
+// Handle any string message values that are received through messages sent back to us.
 function handleReceivedTextMessage(message) {
     const text = JSON.parse(message.message)
     displayJsonResponse(text)
 }
 
-/*
-    Display websocket responses in the Activity Log.
-*/
+// Display websocket responses in the Activity Log.
 function displayJsonResponse(message) {
     let receivedDiv = document.createElement("div")
     let paragraph = document.createElement("p")
     paragraph.setAttribute('style', 'color: orange')
-    let textNode = document.createTextNode(message.text + " From - " + message.fromAddress)
+    let textNode = document.createTextNode("received >>> " + message.text)
     paragraph.appendChild(textNode)
     
     receivedDiv.appendChild(paragraph)
