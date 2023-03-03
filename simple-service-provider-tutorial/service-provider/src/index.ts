@@ -1,18 +1,13 @@
 import WebSocket, { MessageEvent } from "ws";
 
-/*
-    Comprehensive name as opposed to 'Message' for purposed related to understanding the mixnet.
-*/
-var ourAddress : string;
-var websocketConnection : any;
+var ourAddress:          string;
+var websocketConnection: any;
 
 async function main() {
-    var port = '1978' // client websocket listens on 1977 by default, change if yours is different
+    var port = '1978' 
     var localClientUrl = "ws://127.0.0.1:" + port;
 
-    /*
-        Set up and handle websocket connection to our desktop client.
-    */
+    // Set up and handle websocket connection to our desktop client.
     websocketConnection = await connectWebsocket(localClientUrl).then(function (c) {
         return c;
     }).catch(function (err) {
@@ -27,16 +22,8 @@ async function main() {
     sendSelfAddressRequest();
 }
 
-/*
-     Handle any messages that come back down the websocket. 
-*/
+// Handle any messages that come back down the websocket. 
 function handleResponse(responseMessageEvent : MessageEvent) {
-
-    /*
-        The '\x1b' orefix you see in our console.log enables the ability for us to color our 'console.log' statements. The number that 
-        you see following the '[' and preceeding 'm' is the color code that can be compared here :
-        https://en.m.wikipedia.org/wiki/ANSI_escape_code#Colors
-    */
 
     try {
             let response = JSON.parse(responseMessageEvent.data.toString());
@@ -54,46 +41,33 @@ function handleResponse(responseMessageEvent : MessageEvent) {
             console.log('\x1b[92mComment : ' + messageContent.comment + '\x1b[0m');
 
             console.log('\x1b[93mSending response back to client... \x1b[0m')
-            sendMessageToMixnet(messageContent.fromAddress)
 
+	    sendMessageToMixnet(response.senderTag)
         }
     } catch (_) {
         console.log('something went wrong in handleResponse')
     }
 }
 
-/*
-    Function that gets the form data and sends that to the mixnet in a stringified JSON format.
-*/
-function sendMessageToMixnet(targetAddress : any) {
+function sendMessageToMixnet(senderTag: string) {
 
-    /*
-        Place each of the form values into a single object to be sent.
-    */
+    // Place each of the form values into a single object to be sent.
     const messageContentToSend = {
-        text : 'We recieved your request!',
+        text: 'We recieved your request - this reply sent to you anonymously with SURBs',
         fromAddress : ourAddress
     }
     
-    /*
-        We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.
-    */
     const message = {
-        type: "send",
+        type: "reply",
         message: JSON.stringify(messageContentToSend),
-        recipient: targetAddress,
-        withReplySurb: false,
+    	senderTag: senderTag
     }
     
-    /*
-        Send our message object via out via our websocket connection.
-    */
+    // Send our message object via out via our websocket connection.
     websocketConnection.send(JSON.stringify(message));
 }
 
-/*
-    Send a message to the mixnet client, asking what our own address is. 
-*/
+// Send a message to the mixnet client, asking what our own address is. 
 function sendSelfAddressRequest() {
     var selfAddress = {
         type: "selfAddress"
@@ -101,9 +75,7 @@ function sendSelfAddressRequest() {
     websocketConnection.send(JSON.stringify(selfAddress));
 }
 
-/*
-    Function that connects our application to the mixnet Websocket. We want to call this first in our main function.
-*/
+// Function that connects our application to the mixnet Websocket. We want to call this first in our main function.
 function connectWebsocket(url : string) {
     return new Promise(function (resolve, reject) {
         var server = new WebSocket(url);
