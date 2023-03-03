@@ -1,4 +1,4 @@
 # Nym Developer Tutorials Code 
-Repo storing the finished code for [Nym Developer Tutorials](https://nymtech.net/docs/stable/tutorials/nym-simple-websocket-tutorial). 
+Repo storing the code used in the Nym developer tutorials, which can be found on the [Developer Portal](https://nymtech.net/developers)
 
-More coming regularly very soon. 
+Each directory contains its own readme, and a link to the relevant tutorial. 
