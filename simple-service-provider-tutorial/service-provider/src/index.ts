@@ -37,7 +37,6 @@ function handleResponse(responseMessageEvent : MessageEvent) {
 
             console.log('\x1b[93mRecieved : \x1b[0m');
             console.log('\x1b[92mName : ' + messageContent.name + '\x1b[0m');
-            console.log('\x1b[92mService : ' + messageContent.service + '\x1b[0m');
             console.log('\x1b[92mComment : ' + messageContent.comment + '\x1b[0m');
 
             console.log('\x1b[93mSending response back to client... \x1b[0m')
