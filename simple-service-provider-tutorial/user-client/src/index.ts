@@ -1,16 +1,10 @@
-/*
-    The address that is given to us from our mixnet client.
-*/
+// The address that is given to us from our mixnet client.
 var ourAddress: string;
 
-/*
-    Address we want to send our messages to. Replace it with the address of your Service Provider's Nym client!
-*/
+// Address we want to send our messages to. Replace it with the address of your Service Provider's Nym client!
 var targetAddress: string = '6V5eEguz4rUsfntVLKQuD2ymgdY5iDKCV2GY2EH3CxG4.AKdk22atwRaVkN2PLEDsWUKKDc3ieNm1avKqVGgmJx8s@FQon7UwF5knbUr2jf6jHhmNLbJnMreck1eUcVH59kxYE';
 
-/*
-    Variable that holds our websocket connection data.
-*/
+// Variable that holds our websocket connection data.
 var websocketConnection: any;
 
 async function main() {
@@ -38,9 +32,7 @@ async function main() {
     });
 }
 
-/*
-    Get out address to log in the activity log so we know what our address is in the mixnet via our application UI
-*/
+// Get our own client address to log in the activity log so we know what our address is in the mixnet via our application UI
 function sendSelfAddressRequest() {
     var selfAddress = {
         type: "selfAddress"
@@ -49,9 +41,7 @@ function sendSelfAddressRequest() {
     websocketConnection.send(JSON.stringify(selfAddress));
 }
 
-/*
-    Function that gets the form data and sends that to the mixnet in a stringified JSON format.
-*/
+// Function that gets the form data and sends that to the mixnet in a stringified JSON format.
 function sendMessageToMixnet() {
 
     // Access our form's elements current values
