@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Mixnet Websocket Starter Client</title>
+        <link rel="stylesheet" href="../assets/styles.css"/>
+    </head>
+    <body>
+        <div class="content" role="main">
+            <div class="toolbar">
+                <h3>Mixnet Websocket Starter User Client</h3>
+            </div>
+            
+            <div class="section-container">
+               
+                <label for="nameInput" class="form-field-label">Moniker</label>
+                <input id="nameInput" type="text" value="An0n" name="nameInput">
+
+                <label for="textInput" class="form-field-label">Comment</label>
+                <input id="textInput" type="text" value="I would like to use your private service" name="textInput">
+         
+                <div id="send-button">
+                    <label for="send-button" class="submit-button">Send</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="" style="margin-left:20px;max-width: fit-content;">
+            <div style="color: white;margin-bottom: 2rem;">
+                <h4>How it works</h4>
+                <p>Once you have started your Nym Websocket client, you can fill out the form and send data to the Service Provider via mixnet using the <b>"Send"</b> button.</p>
+                <p>Below, you can see the activity log. <b style='color: #36d481;'>Sent</b> messages will display in <b style='color: #36d481;'>green</b> while <b style='color: orange;'>received</b> messages will display in <b style='color: orange;'>orange</b>.</p>
+            </div>
+        </div>
+        
+        <h3 style="margin-left:10px">Activity Log</h3>
+        
+        <p class="output-container">
+            <span id="output"></div>
+        </p>
+        <script src="index.ts"></script>
+    </body>
+</html>
