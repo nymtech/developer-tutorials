@@ -31,7 +31,9 @@ async function main() {
     fileInput.addEventListener('change', onFileChange, false);
 }
 
-// Get our own client address to log in the activity log so we know what our address is in the mixnet via our application UI
+/*
+    Get our own client address to log in the activity log so we know what our address is in the mixnet via our application UI
+*/
 function sendSelfAddressRequest() {
     var selfAddress = {
         type: "selfAddress"
@@ -55,7 +57,9 @@ function readAndSendFile(event) {
     sendMessageToMixnet(blobResult);
 }
 
-// Function that gets the form data and sends that to the mixnet in a stringified JSON format.
+/*
+   Function that gets the form data and sends that to the mixnet in a stringified JSON format.
+*/
 function sendMessageToMixnet(payload) {
 
     var messageContentToSend  = {
@@ -82,19 +86,10 @@ function sendMessageToMixnet(payload) {
    websocketConnection.send(JSON.stringify(message));
 }
 
-// Display responses into our activity log.
+/*
+   Display responses into our activity log.
+*/
 function displayJsonSend(message) {
-
-    /*
-    let sendDiv = document.createElement("div")
-    let paragraph = document.createElement("p")
-    paragraph.setAttribute('style', 'color: #36d481')
-    let paragraphContent = document.createTextNode("sent >>> " + JSON.stringify(message))
-    paragraph.appendChild(paragraphContent)
-    
-    sendDiv.appendChild(paragraph)
-    document.getElementById("output").appendChild(sendDiv)
-    */
 
     let sendDiv = document.createElement("div")
     let messageLog = document.createElement("p")
@@ -119,7 +114,9 @@ function displayJsonSend(message) {
     document.getElementById("output").appendChild(sendDiv)
 }
 
-// Connect to a websocket. 
+/*
+   Connect to a websocket. 
+*/
 function connectWebsocket(url) {
     return new Promise(function (resolve, reject) {
         var server = new WebSocket(url);
@@ -133,12 +130,16 @@ function connectWebsocket(url) {
     });
 }
 
-// Display messages that relate to initialising our client + client status in our activity log.
+/*
+    Handle any messages that come back down the websocket.
+*/
 function displayClientMessage(message) {
     document.getElementById("output").innerHTML += "<p>" + message + "</p >";
 }
 
-// Handle any messages that come back down the websocket.
+/*
+    Handle any messages that come back down the websocket.
+*/
 function handleResponse(resp) {
     let response = JSON.parse(resp.data);
     try {
@@ -146,44 +147,28 @@ function handleResponse(resp) {
         console.log(response);
         if (response.type == "error") {
             displayJsonResponse("Server responded with error: " + response.message);
-        } 
-        //else if (response.type == "selfAddress") {
-        //    ourAddress = response.address;
-            //displayClientMessage("Our address is:  " + ourAddress);
-        //    displayJsonReceived(response);
-        //} else if (response.type == "received") {
-        //    handleReceivedTextMessage(response)
-        //}
-        else if (response.type == "selfAddress" || response.type == "received"){
-            displayJsonReceived(response);
+        } else if (response.type == "selfAddress"){
+            displayJsonResponse(response);
+        } else if (response.type == "received"){
+            handleReceivedTextMessage(response);
         }
     } catch (_) {
-        displayJsonReceived(response);
+        displayJsonResponse(response);
     }
 }
 
-// Handle any string message values that are received through messages sent back to us.
+/*
+    Handle any string message values that are received through messages sent back to us.
+*/
 function handleReceivedTextMessage(message) {
     const text = JSON.parse(message.message)
     displayJsonResponse(text)
 }
 
-// Display websocket responses in the Activity Log.
-function displayJsonResponse(message) {
-    let receivedDiv = document.createElement("div")
-    let paragraph = document.createElement("p")
-    paragraph.setAttribute('style', 'color: orange')
-    let textNode = document.createTextNode("received >>> " + message.text)
-    paragraph.appendChild(textNode)
-    
-    receivedDiv.appendChild(paragraph)
-    document.getElementById("output").appendChild(receivedDiv)
-}
-
 /*
     Functions that will display 'send' related event logs into our activity log.
 */
-function displayJsonReceived(message) {
+function displayJsonResponse(message) {
     //Variables that will get us the date and time value of when we receive the uploaded file. 
     const timeElapsed = Date.now();
     const today = new Date(timeElapsed);
@@ -204,18 +189,21 @@ function displayJsonReceived(message) {
 
     if (message.type == 'selfAddress'){
         //Display our self address.
+        ourAddress = message.address;
         line1Contents = document.createTextNode("Initialized Mixnet Websocket.");
         line2Contents = document.createTextNode('Our address : ' + message.address);
     }
 
-    if (message.type == 'recieved'){
+    if (message.type == 'received'){
         //Display the time and name of the uploaded file.
         let parsedMessageContents = JSON.parse(message.message);
 
+        console.log(parsedMessageContents);
+
         //Creating a data log object to display on our UI
         let dataLog = {
-            url : 'https://ipfs.io/ipfs/' + parsedMessageContents.cid,
-            name: parsedMessageContents.name,
+            url : 'https://ipfs.io/ipfs/' + parsedMessageContents.fileCid,
+            name: parsedMessageContents.filePath,
             time : today.toUTCString()
         }
 
@@ -230,7 +218,5 @@ function displayJsonReceived(message) {
     receivedDiv.appendChild(messageLine2);
     document.getElementById("output").appendChild(receivedDiv);
 }
-
-
 
 main();

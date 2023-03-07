@@ -2,7 +2,6 @@ import WebSocket, { MessageEvent } from "ws";
 import { IPFS, create } from 'ipfs-core'
 import type { CID } from 'multiformats/cid'
 import fetch from 'node-fetch';
-import { fileURLToPath } from "url";
 
 var ourAddress: string;
 var websocketConnection: any;
@@ -31,22 +30,7 @@ async function main() {
   ipfsNode = await create();
   ipfsVersion = await ipfsNode.version();
 
-  console.log('IPFS Version:', ipfsVersion.version)
-
-  ///doIpfs();
-}
-
-
-const readFile = async (ipfs: IPFS, cid: CID): Promise<string> => {
-  const decoder = new TextDecoder()
-  let content = ''
-
-  for await (const chunk of ipfs.cat(cid)) {
-    content += decoder.decode(chunk, {
-      stream: true
-    })
-  }
-  return content
+  console.log('IPFS Version:', ipfsVersion.version);
 }
 
 // Handle any messages that come back down the websocket. 
@@ -73,7 +57,7 @@ function handleResponse(responseMessageEvent : MessageEvent) {
         console.log('\x1b[93mUploading file to IPFS... \x1b[0m')
 
         uploadToIPFS(messageContent,response.senderTag)
-        //sendMessageToMixnet(response.senderTag)
+
       }
   } catch (_) {
         console.log('something went wrong in handleResponse')
@@ -82,16 +66,8 @@ function handleResponse(responseMessageEvent : MessageEvent) {
 
 async function uploadToIPFS(dataToUpload : any,senderTag : string) {
   let fileContent;
-  /*
-  const file = await ipfsNode.add({
-    path: dataToUpload.name,
-    content: new TextEncoder().encode(dataToUpload.dataUrl)
-  })
-  */
+
   if (dataToUpload.type.startsWith('text')) {
-    // For text files, encode the content as a Uint8Array
-    //console.log(dataToUpload);
-    //fileContent = new TextEncoder().encode(dataToUpload.dataUrl);
 
     const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
     fileContent = await blob.arrayBuffer();
@@ -101,7 +77,7 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
     const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
     fileContent = await blob.arrayBuffer();
   } else {
-    // For all other file types, pass the data URL string as the content
+
     fileContent = dataToUpload.dataUrl;
   }
 
@@ -114,12 +90,9 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
   try {
     file.cid.toUpperCase()
   } catch (error) {
-
+    console.log(error)
   }
-  
-  //const content = await readFile(ipfsNode, file.cid)
 
-  //console.log('Added file contents:', content)
   sendMessageToMixnet(file.path,file.cid.toString(),senderTag)
 }
 
@@ -184,10 +157,7 @@ function connectWebsocket(url : string) {
       server.onerror = function (err) {
           reject(err);
       };
-
   });
 }
-
-
 
 main();
