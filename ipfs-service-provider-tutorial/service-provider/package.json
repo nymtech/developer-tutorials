@@ -1,0 +1,26 @@
+{
+  "name": "service-provider",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon ts-node-esm src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.0",
+    "@types/ws": "^8.5.4",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "ipfs-core": "^0.16.0",
+    "multiformats": "^9.6.5",
+    "node-fetch": "^3.3.0",
+    "ws": "^8.12.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
