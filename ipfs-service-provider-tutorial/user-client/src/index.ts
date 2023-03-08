@@ -266,7 +266,8 @@ async function executeFileDownload(data : any,path : string,type : string){
     console.log(type);
 
     const fileName = path;
-    const fileBlob = new Blob([data], { type: type });
+    const encoder = new TextEncoder();
+    const fileBlob = new Blob([encoder.encode(data)], { type: type });
     const fileUrl = URL.createObjectURL(fileBlob);
 
     const downloadLink = document.createElement('a');

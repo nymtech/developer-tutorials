@@ -34,6 +34,7 @@ async function main() {
 
 // Handle any messages that come back down the websocket. 
 function handleResponse(responseMessageEvent : MessageEvent) {
+  console.log('hits handleResponse');
   try {
       let response = JSON.parse(responseMessageEvent.data.toString());
       if (response.type == "error") {
@@ -59,14 +60,13 @@ function handleResponse(responseMessageEvent : MessageEvent) {
             console.log('\x1b[92mType : ' + messageContent.type + '\x1b[0m');
             console.log('\x1b[92mSize : ' + readFileSize(messageContent.size) + '\x1b[0m');
 
-            console.log('\x1b[93mUploading file to IPFS... \x1b[0m')
+            console.log('\x1b[93mUploading file to IPFS... \x1b[0m');
 
-            uploadToIPFS(messageContent,response.senderTag)
+            uploadToIPFS(messageContent,response.senderTag);
         }
-
       }
   } catch (_) {
-        console.log('something went wrong in handleResponse')
+        console.log('something went wrong in handleResponse');
   }
 }
 
@@ -154,7 +154,7 @@ function readFileSize(bytes : number, si=false, dp=1) {
 }
 
 async function getAndSendBackDownloadableFile(cid : string,name : string,type : string,senderTag: string){
-    let data = '';
+    let data;
 
     //data = await ipfsNode.get(cid);
 
@@ -163,12 +163,14 @@ async function getAndSendBackDownloadableFile(cid : string,name : string,type : 
     //const entries = await ipfsNode.ls(cid);
 
     const stream = ipfsNode.cat(cid)
-    const decoder = new TextDecoder()
-   
+    
+    const chunks = [];
     for await (const chunk of stream) {
-        // chunks of data are returned as a Uint8Array, convert it back to a string
-        data += decoder.decode(chunk, { stream: true })
+        chunks.push(chunk);
     }
+
+    //data = new Uint8Array(Buffer.concat(chunks));
+    data = Buffer.concat(chunks).toString();
 
     const messageContentToSend = {
         text: 'We received your download request - this reply sent to you anonymously with SURBs',
