@@ -1,6 +1,5 @@
 import WebSocket, { MessageEvent } from "ws";
-import { IPFS, create } from 'ipfs-core'
-import type { CID } from 'multiformats/cid'
+import { create } from 'ipfs-core'
 import fetch from 'node-fetch';
 
 var ourAddress: string;
@@ -57,7 +56,6 @@ function handleResponse(responseMessageEvent : MessageEvent) {
         console.log('\x1b[93mUploading file to IPFS... \x1b[0m')
 
         uploadToIPFS(messageContent,response.senderTag)
-
       }
   } catch (_) {
         console.log('something went wrong in handleResponse')
@@ -142,8 +140,12 @@ function readFileSize(bytes : number, si=false, dp=1) {
     ++u;
   } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
-
   return bytes.toFixed(dp) + ' ' + units[u];
+}
+
+async function getAndSendBackFile(cid : string){
+    let file = await ipfsNode.get(cid);
+    console.log(file);
 }
 
 // Function that connects our application to the mixnet Websocket. We want to call this first in our main function.

@@ -89,7 +89,7 @@ function sendMessageToMixnet(payload) {
 /*
    Display responses into our activity log.
 */
-function displayJsonSend(message) {
+function displayJsonSend(message){
 
     let sendDiv = document.createElement("div")
     let messageLog = document.createElement("p")
@@ -187,6 +187,8 @@ function displayJsonResponse(message) {
     let line1Contents;
     let line2Contents;
 
+    var downloadFileButton = document.createElement("button");
+
     if (message.type == 'selfAddress'){
         //Display our self address.
         ourAddress = message.address;
@@ -209,6 +211,12 @@ function displayJsonResponse(message) {
 
         line1Contents = document.createTextNode("⬇ " + dataLog.time + " | " + dataLog.name);
         line2Contents = document.createTextNode('Link: ' + dataLog.url);
+
+        downloadFileButton.innerHTML = 'Download File';
+        downloadFileButton.onclick = function()
+        {
+            alert("hello, world");
+        }
     }
 
     messageLine1.appendChild(line1Contents);
@@ -216,7 +224,30 @@ function displayJsonResponse(message) {
     
     receivedDiv.appendChild(messageLine1);
     receivedDiv.appendChild(messageLine2);
+
+    if (message.type == 'received'){
+        receivedDiv.appendChild(downloadFileButton);
+    }
+    
     document.getElementById("output").appendChild(receivedDiv);
+}
+
+async function sendDownloadRequest(cid : string){
+    var messageContentToSend  = {
+        fileCid : cid
+   };  
+   
+   /*We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.*/
+   const message = {
+       type: "sendAnonymous",
+       message: JSON.stringify(messageContentToSend),
+       recipient: targetAddress,
+       replySurbs: 5
+   }
+   
+   displayClientMessage('Download request for file with hash ' + cid + ' sent.')
+   //Send our message object via out via our websocket connection.
+   websocketConnection.send(JSON.stringify(message));
 }
 
 main();
