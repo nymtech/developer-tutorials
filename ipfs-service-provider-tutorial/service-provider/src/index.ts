@@ -44,18 +44,26 @@ function handleResponse(responseMessageEvent : MessageEvent) {
       } else if (response.type == "received") {
         let messageContent = JSON.parse(response.message)
 
-        console.log(response);
-        console.log(messageContent);
+        //Insert this if statement in the download implementation of the tutorial
+        if(messageContent.fileCid){
+            console.log('\x1b[93mRecieved download request: \x1b[0m');
+            console.log('\x1b[92mFile hash : ' + messageContent.fileCid + '\x1b[0m');
+            getAndSendBackDownloadableFile(messageContent.fileCid,messageContent.fileName,response.senderTag);
+        } else {
+            console.log(response);
+            console.log(messageContent);
 
-        console.log('\x1b[93mRecieved : \x1b[0m');
-        console.log('\x1b[92mName : ' + messageContent.name + '\x1b[0m');
-        console.log('\x1b[92mLast Modified : ' + messageContent.lastModifiedDate + '\x1b[0m');
-        console.log('\x1b[92mType : ' + messageContent.type + '\x1b[0m');
-        console.log('\x1b[92mSize : ' + readFileSize(messageContent.size) + '\x1b[0m');
+            console.log('\x1b[93mRecieved : \x1b[0m');
+            console.log('\x1b[92mName : ' + messageContent.name + '\x1b[0m');
+            console.log('\x1b[92mLast Modified : ' + messageContent.lastModifiedDate + '\x1b[0m');
+            console.log('\x1b[92mType : ' + messageContent.type + '\x1b[0m');
+            console.log('\x1b[92mSize : ' + readFileSize(messageContent.size) + '\x1b[0m');
 
-        console.log('\x1b[93mUploading file to IPFS... \x1b[0m')
+            console.log('\x1b[93mUploading file to IPFS... \x1b[0m')
 
-        uploadToIPFS(messageContent,response.senderTag)
+            uploadToIPFS(messageContent,response.senderTag)
+        }
+
       }
   } catch (_) {
         console.log('something went wrong in handleResponse')
@@ -85,11 +93,10 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
   })
 
   console.log('Added file:', file.path, file.cid.toString())
-  try {
-    file.cid.toUpperCase()
-  } catch (error) {
-    console.log(error)
-  }
+
+  let filedatatodl = await ipfsNode.get(file.cid);
+
+  console.log(filedatatodl)
 
   sendMessageToMixnet(file.path,file.cid.toString(),senderTag)
 }
@@ -112,6 +119,7 @@ function sendMessageToMixnet(path: string,cid: string,senderTag: string) {
   
   // Send our message object via out via our websocket connection.
   websocketConnection.send(JSON.stringify(message));
+
 }
 
 // Send a message to the mixnet client, asking what our own address is. 
@@ -143,9 +151,39 @@ function readFileSize(bytes : number, si=false, dp=1) {
   return bytes.toFixed(dp) + ' ' + units[u];
 }
 
-async function getAndSendBackFile(cid : string){
-    let file = await ipfsNode.get(cid);
-    console.log(file);
+async function getAndSendBackDownloadableFile(cid : string,name : string,senderTag: string){
+    let data : any;
+
+    //data = await ipfsNode.get(cid);
+
+    //console.log(data);
+
+    const entries = await ipfsNode.ls(cid);
+
+    const stream = ipfsNode.cat(cid)
+    const decoder = new TextDecoder()
+   
+    for await (const chunk of stream) {
+    // chunks of data are returned as a Uint8Array, convert it back to a string
+        data += decoder.decode(chunk, { stream: true })
+    }
+
+    const messageContentToSend = {
+        text: 'We received your download request - this reply sent to you anonymously with SURBs',
+        fromAddress : ourAddress,
+        downloadableFileData : data,
+        fileName : name
+    }
+    
+    const message = {
+        type: "reply",
+        message: JSON.stringify(messageContentToSend),
+        senderTag: senderTag
+    }
+    
+    // Send our message object via out via our websocket connection.
+    websocketConnection.send(JSON.stringify(message));
+    
 }
 
 // Function that connects our application to the mixnet Websocket. We want to call this first in our main function.

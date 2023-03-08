@@ -161,8 +161,8 @@ function handleResponse(resp) {
     Handle any string message values that are received through messages sent back to us.
 */
 function handleReceivedTextMessage(message) {
-    const text = JSON.parse(message.message)
-    displayJsonResponse(text)
+    const text = JSON.parse(message.message);
+    displayJsonResponse(text);
 }
 
 /*
@@ -197,25 +197,29 @@ function displayJsonResponse(message) {
     }
 
     if (message.type == 'received'){
+
         //Display the time and name of the uploaded file.
         let parsedMessageContents = JSON.parse(message.message);
 
         console.log(parsedMessageContents);
 
-        //Creating a data log object to display on our UI
-        let dataLog = {
-            url : 'https://ipfs.io/ipfs/' + parsedMessageContents.fileCid,
-            name: parsedMessageContents.filePath,
-            time : today.toUTCString()
-        }
+        //Insert this if statement in the download implementation of the tutorial
+        if(parsedMessageContents.downloadableFileData){
+            executeFileDownload(parsedMessageContents.downloadableFileData,parsedMessageContents.fileName)
+            return;
+        } else {
+            //Creating a data log object to display on our UI
+            let dataLog = {
+                url : 'https://ipfs.io/ipfs/' + parsedMessageContents.fileCid,
+                name: parsedMessageContents.filePath,
+                time : today.toUTCString()
+            }
 
-        line1Contents = document.createTextNode("⬇ " + dataLog.time + " | " + dataLog.name);
-        line2Contents = document.createTextNode('Link: ' + dataLog.url);
+            line1Contents = document.createTextNode("⬇ " + dataLog.time + " | " + dataLog.name);
+            line2Contents = document.createTextNode('Link: ' + dataLog.url);
 
-        downloadFileButton.innerHTML = 'Download File';
-        downloadFileButton.onclick = function()
-        {
-            alert("hello, world");
+            downloadFileButton.innerHTML = 'Download File';
+            downloadFileButton.onclick = function(){sendDownloadRequest(parsedMessageContents.fileCid,parsedMessageContents.filePath)}
         }
     }
 
@@ -232,9 +236,13 @@ function displayJsonResponse(message) {
     document.getElementById("output").appendChild(receivedDiv);
 }
 
-async function sendDownloadRequest(cid : string){
+function sendDownloadRequest(cid : string, path : string){
+
+    console.log(path);
+    
     var messageContentToSend  = {
-        fileCid : cid
+        fileCid : cid,
+        fileName : path
    };  
    
    /*We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.*/
@@ -245,9 +253,26 @@ async function sendDownloadRequest(cid : string){
        replySurbs: 5
    }
    
-   displayClientMessage('Download request for file with hash ' + cid + ' sent.')
+   displayClientMessage('Download request for file with hash ' + cid + ' sent.');
+
    //Send our message object via out via our websocket connection.
    websocketConnection.send(JSON.stringify(message));
+}
+
+async function executeFileDownload(data : any,path : string){
+    console.log(data);
+
+    const fileName = path;
+    const fileBlob = new Blob([data], { type: 'text/plain' });
+    const fileUrl = URL.createObjectURL(fileBlob);
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = fileUrl;
+    downloadLink.download = fileName;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
 }
 
 main();
