@@ -205,7 +205,7 @@ function displayJsonResponse(message) {
 
         //Insert this if statement in the download implementation of the tutorial
         if(parsedMessageContents.downloadableFileData){
-            executeFileDownload(parsedMessageContents.downloadableFileData,parsedMessageContents.fileName)
+            executeFileDownload(parsedMessageContents.downloadableFileData,parsedMessageContents.fileName,parsedMessageContents.fileType)
             return;
         } else {
             //Creating a data log object to display on our UI
@@ -219,7 +219,7 @@ function displayJsonResponse(message) {
             line2Contents = document.createTextNode('Link: ' + dataLog.url);
 
             downloadFileButton.innerHTML = 'Download File';
-            downloadFileButton.onclick = function(){sendDownloadRequest(parsedMessageContents.fileCid,parsedMessageContents.filePath)}
+            downloadFileButton.onclick = function(){sendDownloadRequest(parsedMessageContents.fileCid,parsedMessageContents.filePath,parsedMessageContents.fileType)}
         }
     }
 
@@ -236,13 +236,14 @@ function displayJsonResponse(message) {
     document.getElementById("output").appendChild(receivedDiv);
 }
 
-function sendDownloadRequest(cid : string, path : string){
+function sendDownloadRequest(cid : string, path : string,type : string){
 
     console.log(path);
     
     var messageContentToSend  = {
         fileCid : cid,
-        fileName : path
+        fileName : path,
+        fileType : type
    };  
    
    /*We have to send a string to the mixnet for it to be a valid message , so we use JSON.stringify to make our object into a string.*/
@@ -259,11 +260,13 @@ function sendDownloadRequest(cid : string, path : string){
    websocketConnection.send(JSON.stringify(message));
 }
 
-async function executeFileDownload(data : any,path : string){
+async function executeFileDownload(data : any,path : string,type : string){
     console.log(data);
+    console.log(path);
+    console.log(type);
 
     const fileName = path;
-    const fileBlob = new Blob([data], { type: 'text/plain' });
+    const fileBlob = new Blob([data], { type: type });
     const fileUrl = URL.createObjectURL(fileBlob);
 
     const downloadLink = document.createElement('a');

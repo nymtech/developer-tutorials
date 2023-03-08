@@ -48,7 +48,7 @@ function handleResponse(responseMessageEvent : MessageEvent) {
         if(messageContent.fileCid){
             console.log('\x1b[93mRecieved download request: \x1b[0m');
             console.log('\x1b[92mFile hash : ' + messageContent.fileCid + '\x1b[0m');
-            getAndSendBackDownloadableFile(messageContent.fileCid,messageContent.fileName,response.senderTag);
+            getAndSendBackDownloadableFile(messageContent.fileCid,messageContent.fileName,messageContent.fileType,response.senderTag);
         } else {
             console.log(response);
             console.log(messageContent);
@@ -73,6 +73,7 @@ function handleResponse(responseMessageEvent : MessageEvent) {
 async function uploadToIPFS(dataToUpload : any,senderTag : string) {
   let fileContent;
 
+  /*
   if (dataToUpload.type.startsWith('text')) {
 
     const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
@@ -86,6 +87,9 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
 
     fileContent = dataToUpload.dataUrl;
   }
+  */
+  const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
+  fileContent = await blob.arrayBuffer();
 
   const file = await ipfsNode.add({
     path: dataToUpload.name,
@@ -94,21 +98,19 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
 
   console.log('Added file:', file.path, file.cid.toString())
 
-  let filedatatodl = await ipfsNode.get(file.cid);
-
-  console.log(filedatatodl)
-
-  sendMessageToMixnet(file.path,file.cid.toString(),senderTag)
+  // We add type param once we move onto the implement download section
+  sendMessageToMixnet(file.path,file.cid.toString(),dataToUpload.type,senderTag)
 }
 
-function sendMessageToMixnet(path: string,cid: string,senderTag: string) {
+function sendMessageToMixnet(path: string,cid: string,type : string,senderTag: string) {
 
   // Place each of the form values into a single object to be sent.
   const messageContentToSend = {
       text: 'We recieved your request - this reply sent to you anonymously with SURBs',
       fromAddress : ourAddress,
       filePath : path,
-      fileCid : cid
+      fileCid : cid,
+      fileType : type
   }
   
   const message = {
@@ -151,20 +153,20 @@ function readFileSize(bytes : number, si=false, dp=1) {
   return bytes.toFixed(dp) + ' ' + units[u];
 }
 
-async function getAndSendBackDownloadableFile(cid : string,name : string,senderTag: string){
-    let data : any;
+async function getAndSendBackDownloadableFile(cid : string,name : string,type : string,senderTag: string){
+    let data = '';
 
     //data = await ipfsNode.get(cid);
 
     //console.log(data);
 
-    const entries = await ipfsNode.ls(cid);
+    //const entries = await ipfsNode.ls(cid);
 
     const stream = ipfsNode.cat(cid)
     const decoder = new TextDecoder()
    
     for await (const chunk of stream) {
-    // chunks of data are returned as a Uint8Array, convert it back to a string
+        // chunks of data are returned as a Uint8Array, convert it back to a string
         data += decoder.decode(chunk, { stream: true })
     }
 
@@ -172,7 +174,8 @@ async function getAndSendBackDownloadableFile(cid : string,name : string,senderT
         text: 'We received your download request - this reply sent to you anonymously with SURBs',
         fromAddress : ourAddress,
         downloadableFileData : data,
-        fileName : name
+        fileName : name,
+        fileType : type
     }
     
     const message = {
