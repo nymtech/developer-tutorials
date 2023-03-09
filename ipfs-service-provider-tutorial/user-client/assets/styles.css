@@ -31,33 +31,6 @@ p {
     color: white;
 }
 
-.file-upload-label {
-    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
-    background:linear-gradient(90deg, #f4731b 1.05%, #f12d50 100%);
-    border: 1px solid #F4511E;
-    border-radius: 4px;
-    cursor: pointer;
-    color: #fff;
-    display: inline-block;
-    float: left;
-    letter-spacing:2px;
-    text-transform: uppercase;
-    padding:20px;
-    margin: auto;
-}
-    
-.file-upload-input {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    font-size: 1px;
-    width: 0;
-    height: 100%;
-    opacity: 0;
-}
-
 /* Text Inputs */
 select{
     height:45px;
@@ -178,4 +151,46 @@ input[type="number"]:focus{
 
 .toolbar{
     margin-left: 20px;;
+}
+
+/* Button Styles */
+
+.file-upload-label {
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+    background:linear-gradient(90deg, #f4731b 1.05%, #f12d50 100%);
+    border: 1px solid #F4511E;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    display: inline-block;
+    float: left;
+    letter-spacing:2px;
+    text-transform: uppercase;
+    padding:20px;
+    margin: auto;
+}
+    
+.file-upload-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1px;
+    width: 0;
+    height: 100%;
+    opacity: 0;
+}
+
+.download-button {
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+    background:linear-gradient(90deg, #f4731b 1.05%, #f12d50 100%);
+    border: 1px solid #F4511E;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    display: inline-block;
+    padding:5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

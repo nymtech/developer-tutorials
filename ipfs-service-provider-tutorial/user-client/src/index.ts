@@ -215,6 +215,7 @@ function displayJsonResponse(message) {
             line2Contents = document.createTextNode('Link: ' + dataLog.url);
 
             downloadFileButton.innerHTML = 'Download File';
+            downloadFileButton.className = 'download-button'
             downloadFileButton.onclick = function(){sendDownloadRequest(parsedMessageContents.fileCid,parsedMessageContents.filePath,parsedMessageContents.fileType)}
         }
     }

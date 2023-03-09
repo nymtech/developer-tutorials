@@ -69,21 +69,6 @@ function handleResponse(responseMessageEvent : MessageEvent) {
 async function uploadToIPFS(dataToUpload : any,senderTag : string) {
   let fileContent;
 
-  /*
-  if (dataToUpload.type.startsWith('text')) {
-
-    const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
-    fileContent = await blob.arrayBuffer();
-
-  } else if (dataToUpload.type.startsWith('image')) {
-    // For images, convert the data URL to a Blob and pass the Blob as the content
-    const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
-    fileContent = await blob.arrayBuffer();
-  } else {
-
-    fileContent = dataToUpload.dataUrl;
-  }
-  */
   const blob = await fetch(dataToUpload.dataUrl).then((response: { blob: () => any; }) => response.blob());
   fileContent = await blob.arrayBuffer();
 
@@ -92,10 +77,10 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
     content: fileContent
   })
 
-  console.log('Added file:', file.path, file.cid.toString())
+  console.log('Added file:', file.path, file.cid.toString());
 
   // We add type param once we move onto the implement download section
-  sendMessageToMixnet(file.path,file.cid.toString(),dataToUpload.type,senderTag)
+  sendMessageToMixnet(file.path,file.cid.toString(),dataToUpload.type,senderTag);
 }
 
 function sendMessageToMixnet(path: string,cid: string,type : string,senderTag: string) {
