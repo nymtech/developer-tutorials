@@ -34,7 +34,6 @@ async function main() {
 
 // Handle any messages that come back down the websocket. 
 function handleResponse(responseMessageEvent : MessageEvent) {
-  console.log('hits handleResponse');
   try {
       let response = JSON.parse(responseMessageEvent.data.toString());
       if (response.type == "error") {
@@ -51,9 +50,6 @@ function handleResponse(responseMessageEvent : MessageEvent) {
             console.log('\x1b[92mFile hash : ' + messageContent.fileCid + '\x1b[0m');
             getAndSendBackDownloadableFile(messageContent.fileCid,messageContent.fileName,messageContent.fileType,response.senderTag);
         } else {
-            console.log(response);
-            console.log(messageContent);
-
             console.log('\x1b[93mRecieved : \x1b[0m');
             console.log('\x1b[92mName : ' + messageContent.name + '\x1b[0m');
             console.log('\x1b[92mLast Modified : ' + messageContent.lastModifiedDate + '\x1b[0m');
@@ -156,12 +152,6 @@ function readFileSize(bytes : number, si=false, dp=1) {
 async function getAndSendBackDownloadableFile(cid : string,name : string,type : string,senderTag: string){
     let data;
 
-    //data = await ipfsNode.get(cid);
-
-    //console.log(data);
-
-    //const entries = await ipfsNode.ls(cid);
-
     const stream = ipfsNode.cat(cid)
     
     const chunks = [];
@@ -169,13 +159,11 @@ async function getAndSendBackDownloadableFile(cid : string,name : string,type : 
         chunks.push(chunk);
     }
 
-    //data = new Uint8Array(Buffer.concat(chunks));
     if(type.startsWith('text')){
         data = Buffer.concat(chunks).toString();
     } else {
         data = Buffer.concat(chunks);
     }
-    //data = Buffer.concat(chunks).toString();
 
     const messageContentToSend = {
         text: 'We received your download request - this reply sent to you anonymously with SURBs',

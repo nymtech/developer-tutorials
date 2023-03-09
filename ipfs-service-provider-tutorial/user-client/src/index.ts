@@ -143,8 +143,6 @@ function displayClientMessage(message) {
 function handleResponse(resp) {
     let response = JSON.parse(resp.data);
     try {
-        //let response = JSON.parse(resp.data);
-        console.log(response);
         if (response.type == "error") {
             displayJsonResponse("Server responded with error: " + response.message);
         } else if (response.type == "selfAddress"){
@@ -201,8 +199,6 @@ function displayJsonResponse(message) {
         //Display the time and name of the uploaded file.
         let parsedMessageContents = JSON.parse(message.message);
 
-        console.log(parsedMessageContents);
-
         //Insert this if statement in the download implementation of the tutorial
         if(parsedMessageContents.downloadableFileData){
             executeFileDownload(parsedMessageContents.downloadableFileData,parsedMessageContents.fileName,parsedMessageContents.fileType)
@@ -237,8 +233,6 @@ function displayJsonResponse(message) {
 }
 
 function sendDownloadRequest(cid : string, path : string,type : string){
-
-    console.log(path);
     
     var messageContentToSend  = {
         fileCid : cid,
