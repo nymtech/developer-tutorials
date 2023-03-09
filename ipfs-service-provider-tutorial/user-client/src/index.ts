@@ -261,13 +261,17 @@ function sendDownloadRequest(cid : string, path : string,type : string){
 }
 
 async function executeFileDownload(data : any,path : string,type : string){
-    console.log(data);
-    console.log(path);
-    console.log(type);
 
     const fileName = path;
-    const encoder = new TextEncoder();
-    const fileBlob = new Blob([encoder.encode(data)], { type: type });
+    var fileBlob : any;
+
+    if(type.startsWith('text')){
+        const encoder = new TextEncoder();
+        fileBlob = new Blob([encoder.encode(data)], { type: type });
+    } else {
+        const uint8Array = new Uint8Array(data.data);
+        fileBlob = new Blob([uint8Array], { type: type });
+    }
     const fileUrl = URL.createObjectURL(fileBlob);
 
     const downloadLink = document.createElement('a');
@@ -276,7 +280,6 @@ async function executeFileDownload(data : any,path : string,type : string){
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-
 }
 
 main();

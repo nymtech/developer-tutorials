@@ -170,7 +170,12 @@ async function getAndSendBackDownloadableFile(cid : string,name : string,type : 
     }
 
     //data = new Uint8Array(Buffer.concat(chunks));
-    data = Buffer.concat(chunks).toString();
+    if(type.startsWith('text')){
+        data = Buffer.concat(chunks).toString();
+    } else {
+        data = Buffer.concat(chunks);
+    }
+    //data = Buffer.concat(chunks).toString();
 
     const messageContentToSend = {
         text: 'We received your download request - this reply sent to you anonymously with SURBs',
