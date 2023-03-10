@@ -2,7 +2,7 @@
 var ourAddress: string;
 
 // Address we want to send our messages to. Replace it with the address of your Service Provider's Nym client!
-var targetAddress: string = 'FR2dKwFTFDPN1DSBUehbWea5RXTEf2tQGUz1L7RsxGHT.QndBs9qMtNH5s3RXmnP96FgzAeFV6nwLNB6hrGGvUN2@62F81C9GrHDRja9WCqozemRFSzFPMecY85MbGwn6efve';
+var targetAddress: string = '';
 
 // Variable that holds our websocket connection data.
 var websocketConnection: any;
