@@ -22,3 +22,5 @@ npm start
 ```
 
 Once your Service Providers `nym-client` is up and running (on port 1978), navigate to `index.ts` within the `/user-client/src` directory and populate `targetAddress` with the output address that it returns.
+
+The recommended minimum Node version to run this code is 16.14.0 (vnm use 16)
