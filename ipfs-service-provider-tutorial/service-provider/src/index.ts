@@ -79,7 +79,6 @@ async function uploadToIPFS(dataToUpload : any,senderTag : string) {
 
   console.log('Added file:', file.path, file.cid.toString());
 
-  // We add type param once we move onto the implement download section
   sendMessageToMixnet(file.path,file.cid.toString(),dataToUpload.type,senderTag);
 }
 

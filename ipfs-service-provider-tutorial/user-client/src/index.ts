@@ -2,7 +2,7 @@
 var ourAddress: string;
 
 // Address we want to send our messages to. Replace it with the address of your Service Provider's Nym client!
-var targetAddress: string = 'FR2dKwFTFDPN1DSBUehbWea5RXTEf2tQGUz1L7RsxGHT.QndBs9qMtNH5s3RXmnP96FgzAeFV6nwLNB6hrGGvUN2@62F81C9GrHDRja9WCqozemRFSzFPMecY85MbGwn6efve';
+var targetAddress: string = '';
 
 // Variable that holds our websocket connection data.
 var websocketConnection: any;
@@ -187,7 +187,6 @@ function displayJsonResponse(message) {
     let line1Contents;
     let line2Contents;
 
-    //Insert this if statement in the download implementation of the tutorial
     var downloadFileButton = document.createElement("button");
 
     if (message.type == 'selfAddress'){
@@ -199,7 +198,6 @@ function displayJsonResponse(message) {
 
     if (message.type == 'received'){
 
-        //Insert this if statement in the download implementation of the tutorial
         if(message.downloadableFileData){
             executeFileDownload(message.downloadableFileData,message.fileName,message.fileType)
             return;
@@ -226,7 +224,6 @@ function displayJsonResponse(message) {
     receivedDiv.appendChild(messageLine1);
     receivedDiv.appendChild(messageLine2);
 
-    //Insert this if statement in the download implementation of the tutorial
     if (message.type == 'received'){
         receivedDiv.appendChild(downloadFileButton);
     }
@@ -234,7 +231,6 @@ function displayJsonResponse(message) {
     document.getElementById("output").appendChild(receivedDiv);
 }
 
-//Insert this if statement in the download implementation of the tutorial
 function sendDownloadRequest(cid : string, path : string,type : string){
     
     var messageContentToSend  = {
@@ -257,7 +253,6 @@ function sendDownloadRequest(cid : string, path : string,type : string){
    websocketConnection.send(JSON.stringify(message));
 }
 
-//Insert this if statement in the download implementation of the tutorial
 async function executeFileDownload(data : any,path : string,type : string){
 
     const fileName = path;
