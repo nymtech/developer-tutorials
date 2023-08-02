@@ -1,4 +1,4 @@
-use crate::{listen_and_parse_response, DEFAULT_VALIDATOR_RPC};
+use crate::{handle_response, wait_for_non_empty_message, RequestTypes, DEFAULT_VALIDATOR_RPC};
 use cosmrs::AccountId;
 use nym_sdk::mixnet::MixnetClient;
 use nym_sphinx_addressing::clients::Recipient;
@@ -10,18 +10,20 @@ pub async fn query_balance(
     sp_address: Recipient,
 ) -> anyhow::Result<Coin> {
     // construct balance request
-    let message = crate::BalanceRequest {
+    let message = RequestTypes::Balance(crate::BalanceRequest {
         validator: DEFAULT_VALIDATOR_RPC.to_owned(), // rpc endpoint for broadcaster to use
         account,
-    };
+    });
 
     // send serialised request to service via mixnet
     client
-        .send_str(sp_address, &serde_json::to_string(&message)?)
+        .send_bytes(sp_address, message.serialize(), Default::default())
         .await;
 
+    let received = wait_for_non_empty_message(client).await?;
+
     // listen for response from service
-    let sp_response = listen_and_parse_response(client).await?;
+    let sp_response = handle_response(received)?;
 
     // match JSON -> ResponseType
     let res = match sp_response {

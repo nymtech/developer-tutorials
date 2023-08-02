@@ -1,4 +1,4 @@
-use crate::{DEFAULT_DENOM, DEFAULT_VALIDATOR_RPC, BalanceResponse};
+use crate::{BalanceResponse, DEFAULT_DENOM, DEFAULT_VALIDATOR_RPC};
 use cosmrs::rpc::HttpClient;
 use cosmrs::AccountId;
 use nym_validator_client::nyxd::{Coin, CosmWasmClient};
@@ -20,9 +20,8 @@ pub async fn get_balance(
     Ok(BalanceResponse {
         balance: Coin {
             amount: balance.amount,
-            denom: balance.denom
-        }
-        // amount: balance.amount,
-        // denom: balance.denom,
+            denom: balance.denom,
+        }, // amount: balance.amount,
+           // denom: balance.denom,
     })
 }

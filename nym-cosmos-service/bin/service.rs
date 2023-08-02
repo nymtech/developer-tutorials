@@ -1,8 +1,8 @@
 use nym_bin_common::logging::setup_logging;
 use nym_cosmos_service::{
-    create_client, listen_and_parse_request,
+    create_client, handle_request,
     service::{create_broadcaster, get_balance},
-    BalanceResponse, RequestTypes,
+    BalanceResponse, RequestTypes, ResponseTypes,
 };
 use nym_sphinx_anonymous_replies::{self, requests::AnonymousSenderTag};
 
@@ -16,28 +16,38 @@ async fn main() -> anyhow::Result<()> {
     let broadcaster = create_broadcaster().await?;
     println!("listening for messages, press CTRL-C to exit");
 
-    loop {
-        // listen out for incoming requests from mixnet, parse and match them
-        let request: (RequestTypes, AnonymousSenderTag) =
-            listen_and_parse_request(&mut client).await?;
-        // grab sender_tag from parsed request for anonymous replies
-        let return_recipient: AnonymousSenderTag = request.1;
-        match request.0 {
-            RequestTypes::Balance(request) => {
-                println!("\nincoming balance request for: {}\n", request.account);
+    while let Some(received) = client.wait_for_messages().await {
+        for msg in received {
+            let request = match handle_request(msg) {
+                Ok(request) => request,
+                Err(err) => {
+                    eprintln!("failed to handle received request: {err}");
+                    continue;
+                }
+            };
 
-                let balance: BalanceResponse =
-                    get_balance(broadcaster.clone(), request.account).await?;
+            let return_recipient: AnonymousSenderTag = request.1.expect("no sender tag received");
+            match request.0 {
+                RequestTypes::Balance(request) => {
+                    println!("\nincoming balance request for: {}\n", request.account);
 
-                println!("{:#?}", balance);
+                    let balance: BalanceResponse =
+                        get_balance(broadcaster.clone(), request.account).await?;
 
-                println!("\nreturn recipient surb bucket: {}", &return_recipient);
-                println!("\nsending response to {}", &return_recipient);
-                // send response back to anon requesting client via mixnet
-                client
-                    .send_str_reply(return_recipient, &serde_json::to_string(&balance)?)
-                    .await;
+                    let response = ResponseTypes::Balance(balance);
+
+                    println!("{:#?}", response);
+
+                    println!("\nreturn recipient surb bucket: {}", &return_recipient);
+                    println!("\nsending response to {}", &return_recipient);
+                    // send response back to anon requesting client via mixnet
+                    client
+                        .send_str_reply(return_recipient, &serde_json::to_string(&response)?)
+                        .await;
+                }
             }
         }
     }
+
+    Ok(())
 }
