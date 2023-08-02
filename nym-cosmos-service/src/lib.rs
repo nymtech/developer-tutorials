@@ -1,5 +1,5 @@
 use anyhow::bail;
-use cosmrs::{tendermint, AccountId};
+use cosmrs::AccountId;
 use nym_sdk::mixnet::{
     AnonymousSenderTag, MixnetClient, MixnetClientBuilder, ReconstructedMessage, StoragePaths,
 };

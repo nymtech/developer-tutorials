@@ -1,4 +1,3 @@
-use nym_bin_common::logging::setup_logging;
 use nym_cosmos_service::{
     create_client, handle_request,
     service::{create_broadcaster, get_balance},

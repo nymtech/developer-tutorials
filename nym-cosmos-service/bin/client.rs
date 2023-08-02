@@ -1,5 +1,4 @@
 use clap::{Args, Parser, Subcommand};
-use nym_bin_common::logging::setup_logging;
 use nym_cosmos_service::{client::query_balance, create_client};
 use nym_sdk::mixnet::Recipient;
 use nym_validator_client::nyxd::AccountId;
