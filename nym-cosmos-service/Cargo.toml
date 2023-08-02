@@ -1,0 +1,27 @@
+[package]
+name = "nym-cosmos-service"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+cosmrs = "=0.14.0"
+tokio = { version = "1.24.1", features = ["rt-multi-thread", "macros"] }
+serde = "1.0.152"
+serde_json = "1.0.91"
+nym-sdk = { git = "https://github.com/nymtech/nym" }
+nym-sphinx-addressing = { git = "https://github.com/nymtech/nym" }
+nym-validator-client = { git = "https://github.com/nymtech/nym" }
+nym-bin-common = { git = "https://github.com/nymtech/nym" }
+nym-sphinx-anonymous-replies = { git = "https://github.com/nymtech/nym" }
+anyhow = "1.0.72"
+
+[[bin]]
+name = "client"
+path = "bin/client.rs"
+
+[[bin]]
+name = "service"
+path = "bin/service.rs"
