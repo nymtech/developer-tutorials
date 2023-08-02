@@ -2,6 +2,7 @@ use clap::{Args, Parser, Subcommand};
 use nym_cosmos_service::{client::query_balance, create_client};
 use nym_sdk::mixnet::Recipient;
 use nym_validator_client::nyxd::AccountId;
+use nym_bin_common::logging::setup_logging; 
 
 #[derive(Debug, Parser)]
 #[clap(name = "rust sdk demo cosmos app")]
@@ -26,7 +27,7 @@ struct QueryBalance {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // setup_logging();
+    setup_logging();
     let cli = Cli::parse();
     let mut client = create_client("/tmp/client2".into()).await;
     let our_address = client.nym_address();
@@ -39,8 +40,6 @@ async fn main() -> anyhow::Result<()> {
         })) => {
             println!("\nsending bank balance request to service via mixnet");
             let sp_address = Recipient::try_from_base58_string(sp_address).unwrap();
-
-            println!("debug");
             let returned_balance = query_balance(account, &mut client, sp_address).await?;
             println!("\nreturned balance is: {}", returned_balance);
         }

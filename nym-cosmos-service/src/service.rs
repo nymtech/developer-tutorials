@@ -21,7 +21,6 @@ pub async fn get_balance(
         balance: Coin {
             amount: balance.amount,
             denom: balance.denom,
-        }, // amount: balance.amount,
-           // denom: balance.denom,
+        }, 
     })
 }

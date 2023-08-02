@@ -4,10 +4,11 @@ use nym_cosmos_service::{
     BalanceResponse, RequestTypes, ResponseTypes,
 };
 use nym_sphinx_anonymous_replies::{self, requests::AnonymousSenderTag};
+use nym_bin_common::logging::setup_logging;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // setup_logging();
+    setup_logging();
     let mut client = create_client("/tmp/service2".into()).await;
     let our_address = client.nym_address();
     println!("\nservice's nym address: {our_address}");
@@ -35,7 +36,7 @@ async fn main() -> anyhow::Result<()> {
 
                     let response = ResponseTypes::Balance(balance);
 
-                    println!("{:#?}", response);
+                    println!("response from chain: {:#?}", response);
 
                     println!("\nreturn recipient surb bucket: {}", &return_recipient);
                     println!("\nsending response to {}", &return_recipient);

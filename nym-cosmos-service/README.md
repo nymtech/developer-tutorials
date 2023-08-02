@@ -14,3 +14,4 @@ TODO
 - [ ] write tutorial in dev portal
 - [ ] add another query - maybe for a contract
 - [ ] lay the groundwork for step 2 - coconut credential generation
+- [ ] tutorial 3 : service that consumes credential 
