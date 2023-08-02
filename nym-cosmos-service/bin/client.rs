@@ -1,11 +1,11 @@
 use clap::{Args, Parser, Subcommand};
-use nym_cosmos_service::{client::query_balance, create_client};
+use chain_query::{client::query_balance, create_client};
 use nym_sdk::mixnet::Recipient;
 use nym_validator_client::nyxd::AccountId;
 use nym_bin_common::logging::setup_logging; 
 
 #[derive(Debug, Parser)]
-#[clap(name = "rust sdk demo cosmos app")]
+#[clap(name = "rust sdk demo - chain query service")]
 #[clap(about = "query the sandbox testnet blockchain via the mixnet... part 2 coming soon")]
 struct Cli {
     #[clap(subcommand)]

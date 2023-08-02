@@ -481,6 +481,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "chain_query"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "cosmrs",
+ "nym-bin-common",
+ "nym-sdk",
+ "nym-sphinx-addressing",
+ "nym-sphinx-anonymous-replies",
+ "nym-validator-client",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "cipher"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2553,23 +2570,6 @@ dependencies = [
  "schemars",
  "serde",
  "thiserror",
-]
-
-[[package]]
-name = "nym-cosmos-service"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "cosmrs",
- "nym-bin-common",
- "nym-sdk",
- "nym-sphinx-addressing",
- "nym-sphinx-anonymous-replies",
- "nym-validator-client",
- "serde",
- "serde_json",
- "tokio",
 ]
 
 [[package]]

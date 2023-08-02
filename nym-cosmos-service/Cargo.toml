@@ -1,5 +1,5 @@
 [package]
-name = "nym-cosmos-service"
+name = "chain_query"
 version = "0.1.0"
 edition = "2021"
 

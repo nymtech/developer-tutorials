@@ -1,4 +1,4 @@
-use nym_cosmos_service::{
+use chain_query::{
     create_client, handle_request,
     service::{create_broadcaster, get_balance},
     BalanceResponse, RequestTypes, ResponseTypes,
@@ -12,7 +12,7 @@ async fn main() -> anyhow::Result<()> {
     let mut client = create_client("/tmp/service2".into()).await;
     let our_address = client.nym_address();
     println!("\nservice's nym address: {our_address}");
-    // the httpclient we will use to broadcast our signed tx to the blockchain
+    // the httpclient we will use to broadcast our query to the blockchain
     let broadcaster = create_broadcaster().await?;
     println!("listening for messages, press CTRL-C to exit");
 
