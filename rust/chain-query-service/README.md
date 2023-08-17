@@ -9,9 +9,4 @@ cargo run --bin service
 cargo run --bin client query-balance n1lcutqz94k739s39u26rvexql40ehf42zd27fwe <SERVICE_ADDRESS_FROM_CLIPBOARD>
 ```
 
-
-TODO
-- [ ] write tutorial in dev portal
-- [ ] add another query - maybe for a contract
-- [ ] lay the groundwork for step 2 - coconut credential generation
-- [ ] tutorial 3 : service that consumes credential 
+> wait on https://github.com/nymtech/nym/pull/3736 to be merged then do message method rewrite
