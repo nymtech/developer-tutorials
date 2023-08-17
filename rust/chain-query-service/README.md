@@ -1,3 +1,5 @@
+⚠️ Currently WIP - this code will soon be modified in an upcoming release. See point below on PR ⚠️
+
 Demo code for querying Nyx throught the mixnet with Rust SDK.
 
 ## Usage
