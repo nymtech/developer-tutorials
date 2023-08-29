@@ -2,6 +2,7 @@ use crate::{handle_response, wait_for_non_empty_message, RequestTypes, DEFAULT_V
 use cosmrs::AccountId;
 use nym_sdk::mixnet::MixnetClient;
 use nym_sphinx_addressing::clients::Recipient;
+use nym_sdk::mixnet::MixnetMessageSender;
 use nym_validator_client::nyxd::Coin;
 
 pub async fn query_balance(
@@ -17,7 +18,7 @@ pub async fn query_balance(
 
     // send serialised request to service via mixnet
     client
-        .send_bytes(sp_address, message.serialize(), Default::default())
+        .send_message(sp_address, message.serialize(), Default::default())
         .await;
 
     let received = wait_for_non_empty_message(client).await?;
