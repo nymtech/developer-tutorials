@@ -1,14 +1,14 @@
-⚠️ Currently WIP - this code will soon be modified in an upcoming release. See point below on PR ⚠️
+Query the balance of account on Sandbox testnet blockchain through the mixnet with the Rust SDK.
 
-Demo code for querying Nyx throught the mixnet with Rust SDK.
+_Laying the groundwork for upcoming pt2: generating a bandwidth credential._
 
 ## Usage
 ```
-# in one console window run & copy the client address
+# console window #1
 cargo run --bin service
 
-# in another console window run
+# copy the service's Nym address from the terminal
+
+# console window #2
 cargo run --bin client query-balance n1lcutqz94k739s39u26rvexql40ehf42zd27fwe <SERVICE_ADDRESS_FROM_CLIPBOARD>
 ```
-
-> wait on https://github.com/nymtech/nym/pull/3736 to be merged then do message method rewrite
