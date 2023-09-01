@@ -5,7 +5,6 @@ use chain_query::{
 };
 use nym_sphinx_anonymous_replies::{self, requests::AnonymousSenderTag};
 use nym_bin_common::logging::setup_logging;
-
 use nym_sdk::mixnet::MixnetMessageSender;
 
 #[tokio::main]
@@ -43,7 +42,7 @@ async fn main() -> anyhow::Result<()> {
                     println!("\nreturn recipient surb bucket: {}", &return_recipient);
                     println!("\nsending response to {}", &return_recipient);
                     // send response back to anon requesting client via mixnet
-                    client
+                    let _ = client
                         .send_reply(return_recipient, &serde_json::to_string(&response)?)
                         .await;
                 }

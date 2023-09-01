@@ -17,7 +17,7 @@ pub async fn query_balance(
     });
 
     // send serialised request to service via mixnet
-    client
+    let _ = client
         .send_message(sp_address, message.serialize(), Default::default())
         .await;
 
