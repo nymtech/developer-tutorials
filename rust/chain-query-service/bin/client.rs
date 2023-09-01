@@ -38,7 +38,7 @@ async fn main() -> anyhow::Result<()> {
             account,
             sp_address,
         })) => {
-            println!("\nsending bank balance request to service via mixnet");
+            println!("\nsending bank balance request to service via mixnet\n");
             let sp_address = Recipient::try_from_base58_string(sp_address).unwrap();
             let returned_balance = query_balance(account, &mut client, sp_address).await?;
             println!("\nreturned balance is: {}", returned_balance);
@@ -47,8 +47,8 @@ async fn main() -> anyhow::Result<()> {
             println!("\nno command specified - nothing to do")
         }
     }
-    println!("\ndisconnecting client");
+    println!("\ndisconnecting client\n");
     client.disconnect().await;
-    println!("client disconnected");
+    println!("client disconnected\n");
     Ok(())
 }

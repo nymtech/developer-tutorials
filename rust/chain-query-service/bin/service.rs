@@ -15,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
     println!("\nservice's nym address: {our_address}");
     // the httpclient we will use to broadcast our query to the blockchain
     let broadcaster = create_broadcaster().await?;
-    println!("listening for messages, press CTRL-C to exit");
+    println!("listening for messages, press CTRL-C to exit\n");
 
     while let Some(received) = client.wait_for_messages().await {
         for msg in received {
@@ -40,7 +40,7 @@ async fn main() -> anyhow::Result<()> {
                     println!("response from chain: {:#?}", response);
 
                     println!("\nreturn recipient surb bucket: {}", &return_recipient);
-                    println!("\nsending response to {}", &return_recipient);
+                    println!("\nsending response to {}\n", &return_recipient);
                     // send response back to anon requesting client via mixnet
                     let _ = client
                         .send_reply(return_recipient, &serde_json::to_string(&response)?)
