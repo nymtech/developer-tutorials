@@ -5,7 +5,7 @@ use chain_query::{
 };
 use nym_sphinx_anonymous_replies::{self, requests::AnonymousSenderTag};
 use nym_bin_common::logging::setup_logging;
-use nym_sdk::mixnet;
+
 use nym_sdk::mixnet::MixnetMessageSender;
 
 #[tokio::main]
