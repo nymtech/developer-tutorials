@@ -11,11 +11,11 @@ cosmrs = "=0.14.0"
 tokio = { version = "1.24.1", features = ["rt-multi-thread", "macros"] }
 serde = "1.0.152"
 serde_json = "1.0.91"
-nym-sdk = { git = "https://github.com/nymtech/nym", rev = "85a7ec9f02ca8262d47eebb6c3b19d832341b55d" }
-nym-sphinx-addressing = { git = "https://github.com/nymtech/nym", rev = "85a7ec9f02ca8262d47eebb6c3b19d832341b55d" }
-nym-validator-client = { git = "https://github.com/nymtech/nym", rev = "85a7ec9f02ca8262d47eebb6c3b19d832341b55d" }
-nym-bin-common = { git = "https://github.com/nymtech/nym", rev = "85a7ec9f02ca8262d47eebb6c3b19d832341b55d" }
-nym-sphinx-anonymous-replies = { git = "https://github.com/nymtech/nym", rev = "85a7ec9f02ca8262d47eebb6c3b19d832341b55d" }
+nym-sdk = { git = "https://github.com/nymtech/nym", branch = "master" }
+nym-sphinx-addressing = { git = "https://github.com/nymtech/nym", branch = "master" }
+nym-validator-client = { git = "https://github.com/nymtech/nym", branch = "master" }
+nym-bin-common = { git = "https://github.com/nymtech/nym", branch = "master" }
+nym-sphinx-anonymous-replies = { git = "https://github.com/nymtech/nym", branch = "master" }
 anyhow = "1.0.72"
 
 [[bin]]

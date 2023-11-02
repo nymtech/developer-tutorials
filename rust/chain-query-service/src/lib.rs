@@ -63,7 +63,6 @@ pub async fn create_client(config_path: PathBuf) -> MixnetClient {
         .await
         .unwrap()
         .build()
-        .await
         .unwrap();
 
     client.connect_to_mixnet().await.unwrap()
